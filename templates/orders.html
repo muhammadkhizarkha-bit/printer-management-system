@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}Orders — Printer Management System{% endblock %}
+{% block heading %}Orders{% endblock %}
+{% block content %}
+<div class="card">
+  <table class="tbl">
+    <thead>
+      <tr><th>#</th><th>Customer</th><th>Item</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+        <tr>
+          <td>{{ o.id }}</td>
+          <td>{{ o.customer.full_name }}</td>
+          <td>{{ o.printer.name }}</td>
+          <td>{{ o.quantity }}</td>
+          <td>${{ '%.2f'|format(o.total) }}</td>
+          <td><span class="badge b-{{ o.status|lower }}">{{ o.status }}</span></td>
+          <td>{{ o.created_at.strftime('%Y-%m-%d') }}</td>
+          <td class="row gap">
+            {% if o.invoice %}
+              <a class="btn btn-sm" href="/invoices/{{ o.invoice.id }}">
+                {{ ico.icon('invoice') }} <span>Invoice</span>
+              </a>
+            {% endif %}
+            {% if user.role == 'admin' %}
+              <form method="post" action="/orders/{{ o.id }}/status" class="row gap">
+                <select name="status">
+                  {% for s in ['Pending','Approved','Cancelled','Completed'] %}
+                    <option value="{{ s }}" {% if s == o.status %}selected{% endif %}>{{ s }}</option>
+                  {% endfor %}
+                </select>
+                <button class="btn btn-sm btn-primary">Update</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="8" class="muted">No orders.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

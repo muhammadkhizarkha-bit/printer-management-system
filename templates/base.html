@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Printer Management System{% endblock %}</title>
+  <meta name="description" content="Professional printer, order, and invoice management." />
+  <link rel="icon" href="/static/images/pms-logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+{% import "_icons.html" as ico %}
+{% set path = request.url.path %}
+{% if user %}
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="/static/images/pms-logo.svg" alt="Printer Management System" />
+      </div>
+      <nav>
+        <a href="/dashboard" class="nav-link {% if path == '/dashboard' %}active{% endif %}">
+          {{ ico.icon('dashboard') }} <span>Dashboard</span>
+        </a>
+        <a href="/printers" class="nav-link {% if path.startswith('/printers') %}active{% endif %}">
+          {{ ico.icon('catalog') }} <span>Catalog</span>
+        </a>
+        <a href="/orders" class="nav-link {% if path == '/orders' %}active{% endif %}">
+          {{ ico.icon('orders') }} <span>Orders</span>
+        </a>
+        <a href="/invoices" class="nav-link {% if path.startswith('/invoices') %}active{% endif %}">
+          {{ ico.icon('invoice') }} <span>Invoices</span>
+        </a>
+        {% if user.role == 'admin' %}
+          <a href="/customers" class="nav-link {% if path.startswith('/customers') %}active{% endif %}">
+            {{ ico.icon('customers') }} <span>Customers</span>
+          </a>
+          <a href="/reports" class="nav-link {% if path.startswith('/reports') %}active{% endif %}">
+            {{ ico.icon('reports') }} <span>Reports</span>
+          </a>
+        {% else %}
+          <a href="/orders/new" class="nav-link {% if path == '/orders/new' %}active{% endif %}">
+            {{ ico.icon('plus') }} <span>New Order</span>
+          </a>
+        {% endif %}
+      </nav>
+      <div class="sb-footer">Printer Management &middot; v1.0</div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <div class="page-title">{% block heading %}{% endblock %}</div>
+        <div class="user-pill">
+          <span class="role-tag">{{ user.role }}</span>
+          <span>{{ user.full_name }}</span>
+          <a class="btn btn-ghost btn-sm" href="/logout" onclick="return confirm('Log out of your account?')">
+            {{ ico.icon('logout') }} <span>Logout</span>
+          </a>
+        </div>
+      </header>
+      <main class="content">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+{% else %}
+  {% block bare %}{% endblock %}
+{% endif %}
+
+<div id="toast-host"></div>
+<script>
+  (function () {
+    const url = new URL(window.location.href);
+    const info = url.searchParams.get('info');
+    const error = url.searchParams.get('error');
+    if (info) showToast(info, 'ok');
+    if (error) showToast(error, 'err');
+    function showToast(msg, kind) {
+      const t = document.createElement('div');
+      t.className = 'toast ' + (kind === 'err' ? 'toast-err' : 'toast-ok');
+      t.textContent = msg;
+      document.getElementById('toast-host').appendChild(t);
+      setTimeout(() => t.classList.add('show'), 10);
+      setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 4500);
+    }
+    if (info || error) {
+      url.searchParams.delete('info');
+      url.searchParams.delete('error');
+      window.history.replaceState({}, '', url.toString());
+    }
+  })();
+</script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

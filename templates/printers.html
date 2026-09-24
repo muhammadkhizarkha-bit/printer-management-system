@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}Catalog — Printer Management System{% endblock %}
+{% block heading %}Catalog{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="toolbar">
+    <form method="get" class="row gap">
+      <input name="q" value="{{ q }}" placeholder="Search items" style="min-width:220px" />
+      <select name="category">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat }}" {% if cat == category %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn">{{ ico.icon('filter') }} <span>Filter</span></button>
+    </form>
+    {% if user.role == 'admin' %}
+      <button class="btn btn-primary" onclick="document.getElementById('addPrn').showModal()">
+        {{ ico.icon('plus') }} <span>Add Item</span>
+      </button>
+    {% endif %}
+  </div>
+
+  <div class="catalog">
+    {% for p in items %}
+      <div class="prod">
+        <div class="prod-img">
+          {% if p.image %}
+            <img src="{{ p.image }}" alt="{{ p.name }}" />
+          {% else %}
+            <div class="ph">
+              {{ ico.icon('printer') }}
+              <div class="ph-cat">{{ p.category }}</div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="prod-body">
+          <div class="prod-cat">{{ p.category }}</div>
+          <h4>{{ p.name }}</h4>
+          <p class="muted small">{{ p.description }}</p>
+          <div class="row between">
+            <strong>${{ '%.2f'|format(p.price) }}</strong>
+            <span class="muted small">Stock: {{ p.stock }}</span>
+          </div>
+          <div class="row gap" style="margin-top:12px">
+            {% if user.role == 'customer' %}
+              <a class="btn btn-primary btn-sm" href="/orders/new?printer_id={{ p.id }}">
+                {{ ico.icon('cart') }} <span>Order</span>
+              </a>
+            {% else %}
+              <button class="btn btn-sm" onclick='editPrn({{ p.id }}, {{ p.name|tojson }}, {{ p.category|tojson }}, {{ p.price }}, {{ p.stock }}, {{ p.description|tojson }})'>
+                {{ ico.icon('edit') }} <span>Edit</span>
+              </button>
+              <form method="post" action="/printers/{{ p.id }}/delete" onsubmit="return confirm('Delete this item?')">
+                <button class="btn btn-sm btn-danger">{{ ico.icon('trash') }}</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% else %}<p class="muted">No items match your filters.</p>{% endfor %}
+  </div>
+</div>
+
+{% if user.role == 'admin' %}
+<dialog id="addPrn" class="modal">
+  <form method="post" action="/printers/add" enctype="multipart/form-data" class="form grid-2">
+    <h3 class="full">{{ ico.icon('plus') }} Add Item</h3>
+    <label>Name<input name="name" required /></label>
+    <label>Category
+      <select name="category" required>
+        {% for cat in categories %}<option value="{{ cat }}">{{ cat }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Price<input name="price" type="number" step="0.01" min="0" required /></label>
+    <label>Stock<input name="stock" type="number" min="0" required /></label>
+    <label class="full">Description<input name="description" /></label>
+    <label class="full">Image<input name="image" type="file" accept="image/*" /></label>
+    <div class="full row gap end">
+      <button type="button" class="btn" onclick="this.closest('dialog').close()">Cancel</button>
+      <button class="btn btn-primary">{{ ico.icon('check') }} <span>Save</span></button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="editPrn" class="modal">
+  <form id="editPrnForm" method="post" enctype="multipart/form-data" class="form grid-2">
+    <h3 class="full">{{ ico.icon('edit') }} Edit Item</h3>
+    <label>Name<input name="name" required /></label>
+    <label>Category
+      <select name="category" required>
+        {% for cat in categories %}<option value="{{ cat }}">{{ cat }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Price<input name="price" type="number" step="0.01" min="0" required /></label>
+    <label>Stock<input name="stock" type="number" min="0" required /></label>
+    <label class="full">Description<input name="description" /></label>
+    <label class="full">Replace Image<input name="image" type="file" accept="image/*" /></label>
+    <div class="full row gap end">
+      <button type="button" class="btn" onclick="this.closest('dialog').close()">Cancel</button>
+      <button class="btn btn-primary">{{ ico.icon('check') }} <span>Update</span></button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+function editPrn(id, name, category, price, stock, desc) {
+  const f = document.getElementById('editPrnForm');
+  f.action = '/printers/' + id + '/edit';
+  f.name.value = name; f.category.value = category;
+  f.price.value = price; f.stock.value = stock; f.description.value = desc;
+  document.getElementById('editPrn').showModal();
+}
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}Invoices — Printer Management System{% endblock %}
+{% block heading %}Invoices{% endblock %}
+{% block content %}
+<div class="card">
+  <table class="tbl">
+    <thead><tr><th>Invoice #</th><th>Order</th><th>Customer</th><th>Total</th><th>Date</th><th></th></tr></thead>
+    <tbody>
+      {% for i in invoices %}
+        <tr>
+          <td>{{ i.invoice_number }}</td>
+          <td>#{{ i.order.id }}</td>
+          <td>{{ i.order.customer.full_name }}</td>
+          <td>${{ '%.2f'|format(i.total) }}</td>
+          <td>{{ i.created_at.strftime('%Y-%m-%d') }}</td>
+          <td class="row gap">
+            <a class="btn btn-sm" href="/invoices/{{ i.id }}">{{ ico.icon('invoice') }} <span>View</span></a>
+            <a class="btn btn-sm btn-primary" href="/invoices/{{ i.id }}/pdf">{{ ico.icon('download') }} <span>PDF</span></a>
+          </td>
+        </tr>
+      {% else %}<tr><td colspan="6" class="muted">No invoices yet.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

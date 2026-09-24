@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}Dashboard — Printer Management System{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block content %}
+{% if user.role == 'admin' %}
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-icon">{{ ico.icon('customers') }}</div>
+      <div class="stat-k">Customers</div><div class="stat-v">{{ s.customers }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">{{ ico.icon('orders') }}</div>
+      <div class="stat-k">Total Orders</div><div class="stat-v">{{ s.total_orders }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">{{ ico.icon('clock') }}</div>
+      <div class="stat-k">Pending</div><div class="stat-v">{{ s.pending }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">{{ ico.icon('check') }}</div>
+      <div class="stat-k">Approved</div><div class="stat-v">{{ s.approved }}</div>
+    </div>
+    <div class="stat accent">
+      <div class="stat-icon">{{ ico.icon('money') }}</div>
+      <div class="stat-k">Revenue</div><div class="stat-v">${{ '%.2f'|format(s.revenue) }}</div>
+    </div>
+    <div class="stat accent">
+      <div class="stat-icon">{{ ico.icon('shield') }}</div>
+      <div class="stat-k">GST 10%</div><div class="stat-v">${{ '%.2f'|format(s.gst) }}</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>{{ ico.icon('orders') }} Recent Orders</h3>
+      <table class="tbl">
+        <thead><tr><th>#</th><th>Customer</th><th>Item</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for o in recent_orders %}
+            <tr>
+              <td>{{ o.id }}</td>
+              <td>{{ o.customer.full_name }}</td>
+              <td>{{ o.printer.name }}</td>
+              <td>${{ '%.2f'|format(o.total) }}</td>
+              <td><span class="badge b-{{ o.status|lower }}">{{ o.status }}</span></td>
+            </tr>
+          {% else %}<tr><td colspan="5" class="muted">No orders yet.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>{{ ico.icon('package') }} Inventory (lowest stock)</h3>
+      <table class="tbl">
+        <thead><tr><th>Item</th><th>Category</th><th>Stock</th></tr></thead>
+        <tbody>
+          {% for p in inv_items %}
+            <tr>
+              <td>{{ p.name }}</td>
+              <td>{{ p.category }}</td>
+              <td><strong class="{% if p.stock < 5 %}low{% endif %}">{{ p.stock }}</strong></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% else %}
+  <div class="grid-2">
+    <div class="card">
+      <h3>{{ ico.icon('orders') }} My Orders</h3>
+      <table class="tbl">
+        <thead><tr><th>#</th><th>Item</th><th>Qty</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for o in my_orders %}
+            <tr>
+              <td>{{ o.id }}</td><td>{{ o.printer.name }}</td><td>{{ o.quantity }}</td>
+              <td>${{ '%.2f'|format(o.total) }}</td>
+              <td><span class="badge b-{{ o.status|lower }}">{{ o.status }}</span></td>
+            </tr>
+          {% else %}<tr><td colspan="5" class="muted">No orders yet. <a href="/orders/new">Place one</a>.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>{{ ico.icon('invoice') }} My Invoices</h3>
+      <table class="tbl">
+        <thead><tr><th>Invoice</th><th>Total</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for i in my_invoices %}
+            <tr>
+              <td>{{ i.invoice_number }}</td>
+              <td>${{ '%.2f'|format(i.total) }}</td>
+              <td><a href="/invoices/{{ i.id }}" class="btn btn-sm">View</a></td>
+            </tr>
+          {% else %}<tr><td colspan="3" class="muted">No invoices yet.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h3>{{ ico.icon('user') }} Profile</h3>
+    <p><strong>{{ user.full_name }}</strong></p>
+    <p class="muted">{{ user.email }} • {{ user.phone }}</p>
+    <p class="muted">{{ user.address }}</p>
+  </div>
+{% endif %}
+{% endblock %}

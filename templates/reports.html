@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}Reports — Printer Management System{% endblock %}
+{% block heading %}Reports{% endblock %}
+{% block content %}
+<div class="row gap end no-print" style="margin-bottom:12px">
+  <a class="btn" href="/reports/csv">{{ ico.icon('download') }} <span>Export Orders CSV</span></a>
+  <a class="btn btn-primary" href="/reports/pdf">{{ ico.icon('download') }} <span>Download PDF</span></a>
+</div>
+<div class="stats">
+  <div class="stat"><div class="stat-icon">{{ ico.icon('customers') }}</div><div class="stat-k">Customers</div><div class="stat-v">{{ s.customers }}</div></div>
+  <div class="stat"><div class="stat-icon">{{ ico.icon('orders') }}</div><div class="stat-k">Total Orders</div><div class="stat-v">{{ s.total_orders }}</div></div>
+  <div class="stat"><div class="stat-icon">{{ ico.icon('clock') }}</div><div class="stat-k">Pending</div><div class="stat-v">{{ s.pending }}</div></div>
+  <div class="stat"><div class="stat-icon">{{ ico.icon('check') }}</div><div class="stat-k">Approved</div><div class="stat-v">{{ s.approved }}</div></div>
+  <div class="stat"><div class="stat-icon">{{ ico.icon('shield') }}</div><div class="stat-k">Completed</div><div class="stat-v">{{ s.completed }}</div></div>
+  <div class="stat accent"><div class="stat-icon">{{ ico.icon('money') }}</div><div class="stat-k">Revenue</div><div class="stat-v">${{ '%.2f'|format(s.revenue) }}</div></div>
+  <div class="stat accent"><div class="stat-icon">{{ ico.icon('reports') }}</div><div class="stat-k">GST 10%</div><div class="stat-v">${{ '%.2f'|format(s.gst) }}</div></div>
+  <div class="stat"><div class="stat-icon">{{ ico.icon('package') }}</div><div class="stat-k">Inventory Items</div><div class="stat-v">{{ s.stock_items }}</div></div>
+</div>
+{% endblock %}

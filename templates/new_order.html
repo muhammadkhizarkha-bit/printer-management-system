@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}New Order — Printer Management System{% endblock %}
+{% block heading %}New Order{% endblock %}
+{% block content %}
+<div class="card">
+  <form method="post" action="/orders/new" class="form grid-2">
+    <label>Product
+      <select name="printer_id" required>
+        {% for p in printers %}
+          <option value="{{ p.id }}" {% if selected and selected.id == p.id %}selected{% endif %}>
+            {{ p.name }} — ${{ '%.2f'|format(p.price) }} (stock {{ p.stock }})
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Quantity<input type="number" name="quantity" min="1" value="1" required /></label>
+    <label class="full">Delivery Address<input name="address" value="{{ user.address }}" required /></label>
+    <label>Payment Method
+      <select name="payment_method">
+        <option>COD</option><option>Card</option><option>Bank Transfer</option>
+      </select>
+    </label>
+    <div class="full row gap end">
+      <a href="/printers" class="btn">Cancel</a>
+      <button class="btn btn-primary">{{ ico.icon('cart') }} <span>Place Order</span></button>
+    </div>
+  </form>
+</div>
+{% endblock %}

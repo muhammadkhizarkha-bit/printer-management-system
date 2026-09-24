@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}Verify phone — Printer Management System{% endblock %}
+{% block bare %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-brand">{{ ico.icon('phone') }} Verify your phone</div>
+    <h1>Enter OTP</h1>
+    <p class="muted">Enter the 6-digit code sent to <strong>{{ phone }}</strong>.<br/>Code expires in 2 minutes. Max 3 attempts.</p>
+    <form method="post" action="/verify-otp" class="form">
+      <input type="hidden" name="phone" value="{{ phone }}" />
+      <label>OTP Code
+        <input name="code" maxlength="6" pattern="\d{6}" inputmode="numeric" placeholder="123456" required autofocus />
+      </label>
+      <button class="btn btn-primary" type="submit" style="width:100%">
+        {{ ico.icon('check') }} <span>Verify</span>
+      </button>
+    </form>
+    <form method="post" action="/resend-otp" class="form" style="margin-top:8px">
+      <input type="hidden" name="phone" value="{{ phone }}" />
+      <button class="btn btn-ghost" type="submit" style="width:100%">
+        {{ ico.icon('refresh') }} <span>Resend OTP</span>
+      </button>
+    </form>
+    <div class="auth-foot"><a href="/login">Back to login</a></div>
+  </div>
+</div>
+{% endblock %}

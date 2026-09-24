@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ico %}
+{% block title %}Login — Printer Management System{% endblock %}
+{% block bare %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-brand">{{ ico.icon('printer') }} Printer Management</div>
+    <h1>Welcome back</h1>
+    <p class="muted">Sign in to manage printers, orders and invoices.</p>
+    <form method="post" action="/login" class="form">
+      <label>Email<input type="email" name="email" placeholder="you@example.com" required autofocus /></label>
+      <label>Password<input type="password" name="password" placeholder="••••••••" required /></label>
+      <label class="row"><input type="checkbox" name="remember" /> <span>Remember me for 7 days</span></label>
+      <button class="btn btn-primary" type="submit" style="width:100%">
+        {{ ico.icon('login') }} <span>Sign in</span>
+      </button>
+    </form>
+    <div class="auth-foot">Don't have an account? <a href="/signup">Create one</a></div>
+    <div class="hint">Admin demo login: <code>admin@printer.com</code> / <code>Admin@123</code></div>
+  </div>
+</div>
+{% endblock %}
