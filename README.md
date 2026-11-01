@@ -179,24 +179,7 @@ MIT — free to use, modify and distribute.
 
 ---
 
-# 📸 Project Screenshots
 
-## 1. Login Page
-![Login Page](screenshots/login.png)
-
-## 2. Signup Page
-![Signup Page](screenshots/signup.png)
-
-## Admin Dashboard
-![Dashboard](screenshots/admin-dashboard.png)
-
-## 4. Customer Dashboard
-![Customer Dashboard](screenshots/customer-dashboard.png)
-
-## 5. Product Catalog
-![Product Catalog](screenshots/catalog.png)
-
-## 6. Orders Management
 ![Orders Management](screenshots/orders.png)
 
 ## 7. Invoice Management
