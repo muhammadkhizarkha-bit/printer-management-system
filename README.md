@@ -82,25 +82,48 @@ SMS provider (Twilio, MessageBird, etc.) to go live.
 
 ```
 printer_management_system/
+│
 ├── app/
-│   ├── main.py             FastAPI app + lifespan (create tables, seed admin/printers)
-│   ├── config.py           Env config (.env)
-│   ├── database.py         SQLAlchemy engine/session
-│   ├── dependencies.py     Auth deps (get_current_user, require_user, require_admin)
-│   ├── models/             SQLAlchemy models: user, customer, printer, order, invoice
-│   ├── schemas/            Pydantic input/output schemas
-│   ├── services/           Business logic: auth, otp, billing, printer, reports
-│   ├── routes/             HTTP routes: auth, otp, customers, printers, orders, invoices, reports
-│   └── utils/              File upload helper + PDF generator (reportlab)
-├── templates/              Jinja2 pages + _icons.html (SVG icon library)
+│   ├── main.py
+│   ├── config.py
+│   ├── database.py
+│   ├── dependencies.py
+│   │
+│   ├── models/
+│   │   ├── user.py
+│   │   ├── customer.py
+│   │   ├── printer.py
+│   │   ├── order.py
+│   │   └── invoice.py
+│   │
+│   ├── schemas/
+│   ├── services/
+│   ├── routes/
+│   └── utils/
+│
+├── templates/
+│
 ├── static/
-│   ├── css/style.css       Design system (dark theme, tokens, components)
-│   ├── js/app.js           Small UI helpers
-│   └── images/pms-logo.svg Brand mark
-├── tests/                  Smoke tests (pytest)
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── app.js
+│   └── images/
+│       └── pms-logo.svg
+│
+├── screenshots/              ⭐ NEW FOLDER
+│   ├── login.png
+│   ├── signup.png
+│   ├── dashboard.png
+│   ├── printers.png
+│   ├── customers.png
+│   ├── orders.png
+│   └── invoices.png
+│
+├── tests/
 ├── requirements.txt
-├── run.py                  Entry point: `python run.py`
-├── .env                    Local secrets (rotate SECRET_KEY in production)
+├── run.py
+├── .env
 └── README.md
 ```
 
@@ -129,3 +152,52 @@ pytest -q
 ## License
 
 MIT — free to use, modify and distribute.
+---
+
+## 📸 Project Screenshots
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+### Signup Page
+![Signup Page](screenshots/signup.png)
+
+### Admin Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Printer Management
+![Printers](screenshots/printers.png)
+
+### Customer Management
+![Customers](screenshots/customers.png)
+
+### Order Management
+![Orders](screenshots/orders.png)
+
+### Invoice Management
+![Invoices](screenshots/invoices.png)
+
+---
+
+# 📸 Project Screenshots
+
+## 1. Login Page
+![Login Page](screenshots/login.png)
+
+## 2. Signup Page
+![Signup Page](screenshots/signup.png)
+
+## 3. Admin Dashboard
+![Admin Dashboard](screenshots/admin-dashboard.png)
+
+## 4. Customer Dashboard
+![Customer Dashboard](screenshots/customer-dashboard.png)
+
+## 5. Product Catalog
+![Product Catalog](screenshots/catalog.png)
+
+## 6. Orders Management
+![Orders Management](screenshots/orders.png)
+
+## 7. Invoice Management
+![Invoice Management](screenshots/invoices.png)
