@@ -166,10 +166,10 @@ MIT — free to use, modify and distribute.
 ![Dashboard](screenshots/dashboard.png)
 
 ### Printer Management
-![Printers](screenshots/printers.png)
+![Printers](screenshots/catalog.png)
 
-### Customer Management
-![Customers](screenshots/customers.png)
+# Customer Management
+![Customers](screenshots/customer-dashboard.png)
 
 ### Order Management
 ![Orders](screenshots/orders.png)
@@ -187,8 +187,8 @@ MIT — free to use, modify and distribute.
 ## 2. Signup Page
 ![Signup Page](screenshots/signup.png)
 
-## 3. Admin Dashboard
-![Admin Dashboard](screenshots/admin-dashboard.png)
+## Admin Dashboard
+![Dashboard](screenshots/admin-dashboard.png)
 
 ## 4. Customer Dashboard
 ![Customer Dashboard](screenshots/customer-dashboard.png)
